@@ -40,30 +40,30 @@ class Triangular:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    clr = Triangular(0.01, 0.001, 5)
+    clr = Triangular(0.01, 0.001, 20)
     lrs = []
-    for _ in range(101):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 5, decline_mode="half")
+    clr = Triangular(0.01, 0.001, 20, decline_mode="half")
     lrs = []
-    for _ in range(101):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 5, decline_mode="exp")
+    clr = Triangular(0.01, 0.001, 20, decline_mode="exp")
     lrs = []
-    for _ in range(101):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 5, decline_mode="exp", gamma=0.7)
+    clr = Triangular(0.01, 0.001, 20, decline_mode="exp", gamma=0.7)
     lrs = []
-    for _ in range(101):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()

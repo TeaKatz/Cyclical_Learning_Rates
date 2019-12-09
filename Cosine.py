@@ -45,28 +45,28 @@ if __name__ == "__main__":
 
     clr = Cosine(0.01, 0.001, 20)
     lrs = []
-    for _ in range(401):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
     clr = Cosine(0.01, 0.001, 20, decline_mode="half")
     lrs = []
-    for _ in range(401):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
     clr = Cosine(0.01, 0.001, 20, decline_mode="exp")
     lrs = []
-    for _ in range(401):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
 
     clr = Cosine(0.01, 0.001, 20, decline_mode="exp", gamma=0.7)
     lrs = []
-    for _ in range(401):
+    for _ in range(201):
         lrs.append(clr())
     plt.plot(lrs)
     plt.show()
