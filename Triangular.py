@@ -13,14 +13,10 @@ class Triangular:
         self.stepsize = stepsize
         self.decline_mode = decline_mode.lower()
         self.gamma = gamma
-        self.counter = 0
 
-    def reset(self):
-        self.counter = 0
-
-    def __call__(self):
+    def __call__(self, counter):
         # Caluclate current cycle
-        cycle = math.floor(1 + self.counter / (2 * self.stepsize))
+        cycle = math.floor(1 + counter / (2 * self.stepsize))
         # Calculate current max_lr
         if self.decline_mode == "half":
             max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** (cycle - 1)))
@@ -29,10 +25,8 @@ class Triangular:
         else:
             max_lr = self.max_lr
         # Calculate learning rate
-        x = abs(self.counter / self.stepsize - 2 * cycle + 1)
+        x = abs(counter / self.stepsize - 2 * cycle + 1)
         lr = self.base_lr + (max_lr - self.base_lr) * max(0, 1 - x)
-        # Update counter
-        self.counter += 1
 
         return lr
 
