@@ -15,8 +15,12 @@ class Triangular(tf.keras.optimizers.schedules.LearningRateSchedule):
         self.stepsize = stepsize
         self.decline_mode = decline_mode.lower()
         self.gamma = gamma
+        self.step = 0
 
     def __call__(self, step):
+        if isinstance(step, tf.Tensor):
+            step = self.step
+            self.step += 1
         # Caluclate current cycle
         cycle = math.floor(1 + step / (2 * self.stepsize))
         # Calculate current max_lr
