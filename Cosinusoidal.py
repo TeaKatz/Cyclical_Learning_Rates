@@ -17,20 +17,23 @@ class Cosinusoidal:
         self.step = 0
 
     def __call__(self, step):
-        # Caluclate current cycle
-        cycle = math.floor(1 + (step + self.stepsize) / (2 * self.stepsize))
+        # Calculate cycle
+        cycle = ((step + self.stepsize) // (2 * self.stepsize))
+        # Guard step
+        if step > 2 * self.stepsize:
+            step -= 2 * self.stepsize * cycle
         # Calculate current max_lr
         if self.decline_mode == "half":
-            max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** (cycle - 1)))
+            max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** cycle))
         elif self.decline_mode == "exp":
-            max_lr = self.base_lr + (self.max_lr - self.base_lr) * (self.gamma ** (cycle - 1))
+            max_lr = self.base_lr + (self.max_lr - self.base_lr) * (self.gamma ** cycle)
         else:
             max_lr = self.max_lr
-        # Calculate learning rate
-        x = step / (2 * self.stepsize) - cycle + 1
+        # Convert step to degree
+        x = step / (2 * self.stepsize)
         deg = 360 * x
+        # Calculate learning rate
         lr = self.base_lr + (max_lr - self.base_lr) * (math.cos(math.radians(deg)) + 1) / 2
-
         return lr
 
 

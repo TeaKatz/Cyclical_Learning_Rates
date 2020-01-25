@@ -1,7 +1,7 @@
 import math
 
 
-class Sinusoidal:
+class HalfCosinusoidal:
     def __init__(self, max_lr, base_lr, stepsize, decline_mode="none", gamma=0.9):
         assert decline_mode.lower() == "none" or \
                decline_mode.lower() == "half" or \
@@ -18,10 +18,10 @@ class Sinusoidal:
 
     def __call__(self, step):
         # Calculate cycle
-        cycle = (step // (2 * self.stepsize))
+        cycle = (step // self.stepsize)
         # Guard step
-        if step > 2 * self.stepsize:
-            step -= 2 * self.stepsize * cycle
+        if step > self.stepsize:
+            step -= self.stepsize * cycle
         # Calculate current max_lr
         if self.decline_mode == "half":
             max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** cycle))
@@ -31,37 +31,37 @@ class Sinusoidal:
             max_lr = self.max_lr
         # Convert step to degree
         x = step / (2 * self.stepsize)
-        deg = 360 * x - 90
+        deg = 360 * x
         # Calculate learning rate
-        lr = self.base_lr + (max_lr - self.base_lr) * (math.sin(math.radians(deg)) + 1) / 2
+        lr = self.base_lr + (max_lr - self.base_lr) * (math.cos(math.radians(deg)) + 1) / 2
         return lr
 
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    clr = Sinusoidal(0.01, 0.001, 20)
+    clr = HalfCosinusoidal(0.01, 0.001, 40)
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="half")
+    clr = HalfCosinusoidal(0.01, 0.001, 40, decline_mode="half")
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="exp")
+    clr = HalfCosinusoidal(0.01, 0.001, 40, decline_mode="exp")
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="exp", gamma=0.7)
+    clr = HalfCosinusoidal(0.01, 0.001, 40, decline_mode="exp", gamma=0.7)
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
