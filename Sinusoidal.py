@@ -1,7 +1,7 @@
 import math
 
 
-class Triangular:
+class Sinusoidal:
     def __init__(self, max_lr, base_lr, stepsize, decline_mode="none", gamma=0.9):
         assert decline_mode.lower() == "none" or \
                decline_mode.lower() == "half" or \
@@ -27,8 +27,9 @@ class Triangular:
         else:
             max_lr = self.max_lr
         # Calculate learning rate
-        x = abs(step / self.stepsize - 2 * cycle + 1)
-        lr = self.base_lr + (max_lr - self.base_lr) * max(0, 1 - x)
+        x = step / (2 * self.stepsize) - cycle + 1
+        deg = 360 * x - 90
+        lr = self.base_lr + (max_lr - self.base_lr) * (math.sin(math.radians(deg)) + 1) / 2
 
         return lr
 
@@ -36,28 +37,28 @@ class Triangular:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    clr = Triangular(0.01, 0.001, 20)
+    clr = Sinusoidal(0.01, 0.001, 20)
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 20, decline_mode="half")
+    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="half")
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 20, decline_mode="exp")
+    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="exp")
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
     plt.plot(lrs)
     plt.show()
 
-    clr = Triangular(0.01, 0.001, 20, decline_mode="exp", gamma=0.7)
+    clr = Sinusoidal(0.01, 0.001, 20, decline_mode="exp", gamma=0.7)
     lrs = []
     for step in range(201):
         lrs.append(clr(step))
