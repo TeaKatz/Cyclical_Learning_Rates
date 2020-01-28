@@ -17,17 +17,22 @@ class Triangular:
         self.step = 0
 
     def __call__(self, step):
+        # Rescale to match with Keras
+        step += 1
         # Caluclate current cycle
-        cycle = math.floor(1 + step / (2 * self.stepsize))
+        cycle = step // (2 * self.stepsize)
+        # Guard step
+        if step > 2 * self.stepsize:
+            step -= 2 * self.stepsize * cycle
         # Calculate current max_lr
         if self.decline_mode == "half":
-            max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** (cycle - 1)))
+            max_lr = self.max_lr - (self.max_lr - self.base_lr) * (1 - 1 / (2 ** cycle))
         elif self.decline_mode == "exp":
-            max_lr = self.base_lr + (self.max_lr - self.base_lr) * (self.gamma ** (cycle - 1))
+            max_lr = self.base_lr + (self.max_lr - self.base_lr) * (self.gamma ** cycle)
         else:
             max_lr = self.max_lr
         # Calculate learning rate
-        x = abs(step / self.stepsize - 2 * cycle + 1)
+        x = abs((step / self.stepsize) - 1)
         lr = self.base_lr + (max_lr - self.base_lr) * max(0, 1 - x)
 
         return lr

@@ -17,8 +17,10 @@ class HalfCosinusoidal:
         self.step = 0
 
     def __call__(self, step):
+        # Rescale to match with Keras
+        step += 1
         # Calculate cycle
-        cycle = (step // self.stepsize)
+        cycle = step // self.stepsize
         # Guard step
         if step > self.stepsize:
             step -= self.stepsize * cycle

@@ -17,8 +17,10 @@ class Cosinusoidal:
         self.step = 0
 
     def __call__(self, step):
+        # Rescale to match with Keras
+        step += 1
         # Calculate cycle
-        cycle = ((step + self.stepsize) // (2 * self.stepsize))
+        cycle = (step + self.stepsize) // (2 * self.stepsize)
         # Guard step
         if step > 2 * self.stepsize:
             step -= 2 * self.stepsize * cycle
